@@ -157,14 +157,14 @@ class Network(object):
                             for k in range(0, n, mini_batch_size)]
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, eta, lmbda, len(training_data))
-            print("Epoch %s training complete" % j)
+            print("Epoch %s training complete" % (j+1))
             if monitor_training_cost:
                 cost = self.total_cost(training_data, lmbda)
                 training_cost.append(cost)
                 print("Cost on training data: {}".format(cost))
             if monitor_training_accuracy:
                 accuracy = self.accuracy(training_data, convert=True)
-                training_accuracy.append(accuracy)
+                training_accuracy.append(accuracy/n)
                 print("Accuracy on training data: {} / {}".format(accuracy, n))
             if monitor_evaluation_cost:
                 cost = self.total_cost(evaluation_data, lmbda, convert=True)
@@ -172,7 +172,7 @@ class Network(object):
                 print("Cost on evaluation data: {}".format(cost))
             if monitor_evaluation_accuracy:
                 accuracy = self.accuracy(evaluation_data)
-                evaluation_accuracy.append(accuracy)
+                evaluation_accuracy.append(accuracy/n_data)
                 print("Accuracy on evaluation data: {} / {}".format(accuracy, n_data))
             print()
         return evaluation_cost, evaluation_accuracy, training_cost, training_accuracy
@@ -323,13 +323,47 @@ def sigmoid_prime(z):
     """Derivative of the sigmoid function."""
     return sigmoid(z)*(1-sigmoid(z))
 
+#### Results visualization
+def plot_results(evaluation_cost, evaluation_accuracy, training_cost, training_accuracy):
+    """
+    Plot two graphs, one for the cost and another for the accuracy
+    (for both the training and evaluation data).
+    """
+    from matplotlib import pyplot as plt
+
+    epochs = max(len(evaluation_cost), len(evaluation_accuracy), len(training_cost), len(training_accuracy))
+    plt.subplot(2, 1, 1)
+    if training_cost:
+        plt.plot(range(1, epochs + 1), training_cost, label='Cost on training data')
+    if evaluation_cost:
+        plt.plot(range(1, epochs + 1), evaluation_cost, label='Cost on evaluation data')
+    plt.title('Cost')
+    plt.xlabel('Epochs')
+    plt.legend()
+    plt.subplot(2, 1, 2)
+    if training_accuracy:
+        plt.plot(range(1, epochs + 1), training_accuracy, label='Accuracy on training data')
+    if evaluation_accuracy:
+        plt.plot(range(1, epochs + 1), evaluation_accuracy, label='Accuracy on evaluation data')
+    plt.title('Accuracy %')
+    plt.xlabel('Epochs')
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
 ## Train a neural network against the MNIST dataset
 if __name__ == "__main__":
     import mnist_loader
 
     training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
-    net = Network([784, 30, 10])
-    net.SGD(training_data, 20, 10, 0.5,
-            lmbda=0.25
-            evaluation_data=test_data,
-            monitor_evaluation_accuracy=True)
+    net = Network([784, 100, 10])
+    net.large_weight_initializer()
+    results = net.SGD(
+        training_data, 60, 10, 0.1,
+        lmbda=5.0,
+        evaluation_data=test_data,
+        monitor_evaluation_cost=True,
+        monitor_evaluation_accuracy=True,
+        monitor_training_cost=True,
+        monitor_training_accuracy=True)
+    plot_results(*results)
