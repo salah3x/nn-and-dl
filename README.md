@@ -46,6 +46,7 @@ Code examples of algorithms used to classify handwritten digits from the MNIST d
     An improvement to the `network` module:
     - Replace the `MSE` with the `cross entropy cost function` to prevent learning slowdown when neurons are saturated (can also be done by adding a `softmax` layer with `minus log-likelihood cost function`).
     - Use `L2 regularization` to reduce the effects of `overfitting` the model.
+    - Speed up learning by changing the weights initialization technique.
     - Monitor the training and evaluation accuracy/cost.
     - Save and load the model to/from disk.
 

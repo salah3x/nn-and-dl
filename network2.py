@@ -357,7 +357,6 @@ if __name__ == "__main__":
 
     training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
     net = Network([784, 100, 10])
-    net.large_weight_initializer()
     results = net.SGD(
         training_data, 60, 10, 0.1,
         lmbda=5.0,
