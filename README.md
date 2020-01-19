@@ -61,3 +61,16 @@ Code examples of algorithms used to classify handwritten digits from the MNIST d
     ```
     $ python network2.py
     ```
+
+3. ### Network3
+
+    Use `convolutional networks` to get a higher accuracy on the Mnist classification problem.
+    - Introduce a `Convolutional + Pooling layer` to the architecture of the network.
+    - Use a `softmax` layer with `minus log-likelihood cost function`.
+    - Train on the artificially expanded dataset.
+    - Use `dropout` in the `fully connected` and `softmax` layers.
+    - 
+
+    ```
+    $ python network3.py
+    ```
