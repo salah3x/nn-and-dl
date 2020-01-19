@@ -29,9 +29,17 @@ Code examples of algorithms used to classify handwritten digits from the MNIST d
     $ python mnist_svm.py
     ```
 
+4. ### Mnist expand
+
+    Artificially expand the 50,000 MNIST training images to as set of 250,000 images.
+
+    ```
+    $ python mnist_expand.py
+    ```
+
 ## Deep Learning
 
-4. ### Network
+1. ### Network
 
     A module that implement the `stochastic gradient descent` learning algorithm for a feedforward neural network. Gradients are calculated using `backpropagation`.
     
@@ -41,7 +49,7 @@ Code examples of algorithms used to classify handwritten digits from the MNIST d
     $ python network.py
     ```
 
-5. ### Network2
+2. ### Network2
 
     An improvement to the `network` module:
     - Replace the `MSE` with the `cross entropy cost function` to prevent learning slowdown when neurons are saturated (can also be done by adding a `softmax` layer with `minus log-likelihood cost function`).
